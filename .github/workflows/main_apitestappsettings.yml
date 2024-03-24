@@ -27,6 +27,7 @@ jobs:
            files: 'WebApplication1\WebApplication1\appsettings.json'
         env:
             AzureAd.ClientSecret: ${{ secrets.ClientSecret }}
+            ConnectionStrings.SnowflakeConnection: ${{ secrets.SnowflakeConnection }}
             App.ServerRootAddress: WebApplication1\WebApplication1
 
       - name: Build with dotnet
