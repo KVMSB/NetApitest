@@ -23,12 +23,10 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
-
-      - name: dotnet publish
         run: |
             CD WebApplication1\WebApplication1
-            dotnet publish -c Release -o WebApplication1.csproj
+            dotnet build --configuration Release
+            dotnet publish -c Release -o WebApplication1.csproj      
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
