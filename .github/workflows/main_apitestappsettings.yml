@@ -21,6 +21,13 @@ jobs:
         with:
           dotnet-version: '6.0.x'
           include-prerelease: true
+      - name: App Settings Variable Substitution
+        uses: microsoft/variable-substitution@v1
+        with:
+           files: 'WebApplication1\WebApplication1\appsettings.json'
+        env:
+            AzureAd.ClientSecret: ${{ secrets.ClientSecret }}
+            App.ServerRootAddress: WebApplication1\WebApplication1
 
       - name: Build with dotnet
         run: |
@@ -47,13 +54,7 @@ jobs:
         with:
           name: .net-app
 
-      - name: App Settings Variable Substitution
-        uses: microsoft/variable-substitution@v1
-        with:
-           files: 'WebApplication1\WebApplication1\bin\Release\net6.0\appsettings.json'
-        env:
-            AzureAd.ClientSecret: ${{ secrets.ClientSecret }}
-            App.ServerRootAddress: WebApplication1\WebApplication1
+    
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
