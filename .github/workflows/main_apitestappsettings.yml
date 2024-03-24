@@ -4,9 +4,6 @@
 name: Build and deploy ASP.Net Core app to Azure Web App - APITestAppsettings
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 jobs:
@@ -60,7 +57,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'APITestAppsettings'
-          slot-name: 'Production'
+          app-name: 'testprofilepulish'
+          slot-name: 'testprofilepulish'
           publish-profile: ${{ secrets.PROFILE }}
           package: .
