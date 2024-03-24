@@ -26,7 +26,7 @@ jobs:
         run: |
             CD WebApplication1\WebApplication1
             dotnet build --configuration Release
-            dotnet publish -c Release -o WebApplication1.csproj      
+            dotnet publish -c Release -o    
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
