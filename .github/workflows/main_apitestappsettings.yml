@@ -26,6 +26,7 @@ jobs:
         with:
            files: 'WebApplication1\WebApplication1\appsettings.json'
         env:
+            name: Prodcution
             AzureAd.ClientSecret: ${{ secrets.ClientSecret }}
             App.ServerRootAddress: WebApplication1\WebApplication1
 
@@ -39,7 +40,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/WebApplication1
+          path: ${{env.DOTNET_ROOT}}/myapp
          
   deploy:
     runs-on: windows-latest
