@@ -26,14 +26,16 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: |
+            CD WebApplication1\WebApplication1
+            dotnet publish -c Release -o WebApplication1.csproj
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
-
+          path: WebApplication1\WebApplication1\bin\Release\net6.0\
+         
   deploy:
     runs-on: windows-latest
     needs: build
@@ -47,6 +49,13 @@ jobs:
         with:
           name: .net-app
 
+      - name: App Settings Variable Substitution
+        uses: microsoft/variable-substitution@v1
+        with:
+           files: 'WebApplication1\WebApplication1\bin\Release\net6.0\appsettings.json'
+        env:
+            AzureAd.ClientSecret: ${{ secrets.ClientSecret }}
+            App.ServerRootAddress: WebApplication1\WebApplication1
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
