@@ -26,13 +26,13 @@ jobs:
         run: |
             CD WebApplication1\WebApplication1
             dotnet build --configuration Release
-            dotnet publish -c Release -o    
+            dotnet publish -c Release  
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: .net-app
-          path: WebApplication1\WebApplication1\bin\Release\net6.0\
+          path: ./WebApplication1/WebApplication1/bin/Release/net6.0
          
   deploy:
     runs-on: windows-latest
