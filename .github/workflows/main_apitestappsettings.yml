@@ -24,7 +24,7 @@ jobs:
            files: 'WebApplication1\WebApplication1\appsettings.json'
         env:
             AzureAd.ClientSecret: ${{ secrets.ClientSecret }}
-            ConnectionStrings.SnowflakeConnection: ${{ secrets.SnowflakeConnection }}
+            ConnectionStrings.SnowflakeConnection: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_FD66408CAEC242CEB3EF0CA1D16AD3C6 }}
             App.ServerRootAddress: WebApplication1\WebApplication1
 
       - name: Build with dotnet
@@ -59,5 +59,5 @@ jobs:
         with:
           app-name: 'testprofilepulish'
           slot-name: 'testenv'
-          publish-profile: ${{ secrets.PROFILE }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_FD66408CAEC242CEB3EF0CA1D16AD3C6 }}
           package: .
