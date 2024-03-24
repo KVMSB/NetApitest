@@ -39,7 +39,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: .net-app
-          path: ./WebApplication1/WebApplication1/bin/Release/net6.0
+          path: ./WebApplication1/WebApplication1/bin/Release/
          
   deploy:
     runs-on: windows-latest
