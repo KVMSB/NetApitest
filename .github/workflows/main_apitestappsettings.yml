@@ -58,6 +58,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'testprofilepulish'
-          slot-name: 'testprofilepulish'
+          slot-name: 'testenv'
           publish-profile: ${{ secrets.PROFILE }}
           package: .
