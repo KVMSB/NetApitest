@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Identity.Web;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Services;
 using Services.Interface;
@@ -19,8 +20,23 @@ var configuration = builder.Configuration;
 builder.Services.AddControllers();
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-    .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+        .AddJwtBearer(options =>
+        {
+            options.Authority = "https://login.microsoftonline.com/" + configuration.GetValue<string>("TenantId")+"/v2.0";
+            options.Audience = configuration.GetValue<string>("ClientId");
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer = "https://login.microsoftonline.com/d022fc40-e3d0-4b60-af21-740a92219103/v2.0",
+                ValidateAudience = true,
+                ValidAudience = "bd8ff232-34b4-4999-8796-4700e5b30a88",
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero // Optional: Adjust for clock skew
+            };
+            options.MetadataAddress = $"https://login.microsoftonline.com/{configuration.GetValue<string>("TenantId")}/v2.0/.well-known/openid-configuration";
+        });
 
+builder.Services.AddAuthorization();
 
 // Configure CORS
 builder.Services.AddCors(options =>
