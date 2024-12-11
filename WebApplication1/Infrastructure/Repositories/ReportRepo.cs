@@ -17,9 +17,11 @@
         {
             // Retrieve reports for a user based on their email
             return await _context.Reports
+                  .Include(report => report.ReportHospitalMaps) // Include ReportHospitalMaps
+        .ThenInclude(reportHospitalMap => reportHospitalMap.Hospital) // Include associated Hospitals
             .Where(report => report.ReportHospitalMaps
-                .Any(reportRole => reportRole.Hospital.UserHospitalMaps
-                    .Any(userRole => userRole.User.Email.ToLower() == email)))
+                .Any(reportHospital => reportHospital.Hospital.UserHospitalMaps
+                    .Any(userHospital => userHospital.User.Email.ToLower() == email)))
             .ToListAsync();
         }
     }

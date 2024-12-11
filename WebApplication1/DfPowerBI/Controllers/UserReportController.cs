@@ -5,7 +5,7 @@ namespace DfPowerBI.Controllers
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Services.Interface;
-
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UserReportController : ControllerBase
@@ -18,8 +18,9 @@ namespace DfPowerBI.Controllers
         }
 
         [HttpGet]
-        public async Task<List<ReportResponce>> Get(string email) 
+        public async Task<List<ReportResponce>> Get() 
         {
+            string email = User.Claims.FirstOrDefault(x => x.Type == "preferred_username").Value;
             return await reportService.GetReports(email);
         }
     }

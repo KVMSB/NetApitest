@@ -19,7 +19,21 @@
         public async Task<List<ReportResponce>> GetReports(string email)
         {
             var res = await _reportRepo.GetReportsByEmailAsync(email);
-            var reports = _mapper.Map<List<ReportResponce>>(res);
+            var reports = new List<ReportResponce>();
+            var workspace = res?.FirstOrDefault();
+            foreach (var item in workspace?.ReportHospitalMaps)
+            {
+                reports.Add(new ReportResponce
+                {
+                    HospitalId = item.HospitalId,
+                    HospitalName = item.Hospital.Name,
+                    ReportID = workspace.ReportId,
+                    Name = workspace.Name,
+                    WorkspaceID = workspace.WorkspaceId,
+                    Id = workspace.Id
+                });
+            }
+            
 
             return reports;
         }
