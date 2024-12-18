@@ -80,3 +80,4 @@ msbuild.wrn
 dist
 /.vs
 
+/WebApplication1/DfPowerBI

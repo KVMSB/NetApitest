@@ -21,16 +21,16 @@
             var res = await _reportRepo.GetReportsByEmailAsync(email);
             var reports = new List<ReportResponce>();
             var workspace = res?.FirstOrDefault();
-            foreach (var item in workspace?.ReportHospitalMaps)
+            foreach (var item in res)
             {
                 reports.Add(new ReportResponce
                 {
-                    HospitalId = item.HospitalId,
-                    HospitalName = item.Hospital.Name,
-                    ReportID = workspace.ReportId,
-                    Name = workspace.Name,
-                    WorkspaceID = workspace.WorkspaceId,
-                    Id = workspace.Id
+                    HospitalId = item.ReportHospitalMaps.FirstOrDefault().HospitalId,
+                    HospitalName = item.ReportHospitalMaps.FirstOrDefault().Hospital.Name,
+                    ReportID = item.ReportId,
+                    Name = item.Name,
+                    WorkspaceID = item.WorkspaceId,
+                    Id = item.Id
                 });
             }
             
