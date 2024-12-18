@@ -17,5 +17,7 @@ public partial class Report
 
     public DateTime? CreatedDate { get; set; }
 
+    public string? HiddenPages { get; set; }
+
     public virtual ICollection<ReportHospitalMap> ReportHospitalMaps { get; set; } = new List<ReportHospitalMap>();
 }

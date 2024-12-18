@@ -19,6 +19,7 @@ namespace Services
     using Newtonsoft.Json;
     using System.Runtime.InteropServices;
     using Domain.Infrastructure;
+    using Infrastructure.Repositories.Interface;
 
     public class PowerBIEmbedService : IPowerBIEmbedService
     {
@@ -27,13 +28,14 @@ namespace Services
         private readonly string clientSecret = "YOUR_CLIENT_SECRET";
         private readonly string authority;
         private readonly string[] scopes = new[] { "https://analysis.windows.net/powerbi/api/.default" };
+        private readonly IReportRepo _reportRepo;
 
         private string urlPowerBiServiceApiRoot { get; }
         public const string powerbiApiDefaultScope = "https://analysis.windows.net/powerbi/api/.default";
         public static readonly string[] RequiredScopes = new string[] {
          "https://analysis.windows.net/powerbi/api/Report.Read.All"
      };
-        public PowerBIEmbedService(IConfiguration configuration)
+        public PowerBIEmbedService(IConfiguration configuration, IReportRepo reportRepo)
         {
             var azureAdSection = configuration.GetSection("AzureAd");
             tenantId = azureAdSection["TenantId"];
@@ -42,6 +44,7 @@ namespace Services
 
             authority = $"https://login.microsoftonline.com/{tenantId}";
             this.urlPowerBiServiceApiRoot = configuration["PowerBi:ServiceRootUrl"];
+            this._reportRepo = reportRepo;
         }
 
         public string GetAccessTokenAsync()
@@ -93,6 +96,8 @@ namespace Services
             Guid ReportId = new Guid(reportId);
             PowerBIClient pbiClient = GetPowerBiClient();
 
+            var hiddenPages = _reportRepo.GetReportHiddenPages(reportId);
+
             // Call the Power BI service API to get the embedding data.
             var report = await pbiClient.Reports.GetReportInGroupAsync(WorkspaceId, ReportId);
             var pages = await pbiClient.Reports.GetPagesAsync(WorkspaceId, ReportId);
@@ -106,7 +111,7 @@ namespace Services
                 EmbedUrl = report.EmbedUrl,
                 Name = report.Name,
                 Token = embedToken.Token,
-                Pages = pages.Value.Where(x=>!(x.DisplayName.ToLower().Contains("page 1") || x.DisplayName.ToLower().Contains("positive drill") || x.DisplayName.ToLower().Contains("negative drill"))).ToList()
+                Pages = pages.Value.Where(x=>!hiddenPages.ToLower().Contains(x.DisplayName.ToLower())).ToList()
             };
 
             //string accessToken = await GetAccessTokenAsync();

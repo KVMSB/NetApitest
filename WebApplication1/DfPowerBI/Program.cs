@@ -42,8 +42,12 @@ IMapper mapper = mapperConfig.CreateMapper();
 builder.Services.AddSingleton(mapper);
 
 // Configure DbContext
-builder.Services.AddDbContext<DfpowerbiDevContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DbConnectionString")));
+builder.Services.AddDbContext<DfpowerbiDevContext>((serviceProvider, options) =>
+{
+    var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+    var connectionString = configuration.GetConnectionString("DbConnectionString");
+    options.UseSqlServer(connectionString);
+});
 
 // Register repositories and services
 builder.Services.AddScoped<IReportRepo, ReportRepo>();

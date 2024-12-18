@@ -24,5 +24,10 @@
                     .Any(userHospital => userHospital.User.Email.ToLower() == email)))
             .ToListAsync();
         }
+
+        public string? GetReportHiddenPages(string reportID)
+        {
+            return _context.Reports.FirstOrDefault(x => x.ReportId == reportID).HiddenPages;
+        }
     }
 }

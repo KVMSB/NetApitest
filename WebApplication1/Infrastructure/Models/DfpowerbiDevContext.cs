@@ -1,18 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Models;
 
 public partial class DfpowerbiDevContext : DbContext
 {
-    public DfpowerbiDevContext()
-    {
-    }
+    private readonly IConfiguration _configuration;
 
-    public DfpowerbiDevContext(DbContextOptions<DfpowerbiDevContext> options)
+    // Constructor that takes IConfiguration
+    public DfpowerbiDevContext(DbContextOptions<DfpowerbiDevContext> options, IConfiguration configuration)
         : base(options)
     {
+        _configuration = configuration;
     }
 
     public virtual DbSet<Hospital> Hospitals { get; set; }
@@ -26,9 +27,11 @@ public partial class DfpowerbiDevContext : DbContext
     public virtual DbSet<UserHospitalMap> UserHospitalMaps { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=tcp:dfpowebi-dev.database.windows.net,1433;Initial Catalog=dfpowerbi-dev;Persist Security Info=False;User ID=dfAdmin;Password=dfPowerbi@123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
-
+    {
+        // Use connection string from appsettings.json
+        var connectionString = _configuration.GetConnectionString("DbConnectionString");
+        optionsBuilder.UseSqlServer(connectionString);
+    }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Hospital>(entity =>
