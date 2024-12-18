@@ -16,20 +16,20 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: '8.0.x'
           include-prerelease: true
       - name: App Settings Variable Substitution
         uses: microsoft/variable-substitution@v1
         with:
-           files: 'WebApplication1\WebApplication1\appsettings.json'
+           files: 'WebApplication1\DfPowerBI\appsettings.json'
         env:
             AzureAd.ClientSecret: ${{ secrets.ClientSecret }}
-            ConnectionStrings.SnowflakeConnection: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_FD66408CAEC242CEB3EF0CA1D16AD3C6 }}
-            App.ServerRootAddress: WebApplication1\WebApplication1
+            ConnectionStrings.DbConnectionString: ${{ secrets.DbConnectionString }}
+            App.ServerRootAddress: WebApplication1\DfPowerBI
 
       - name: Build with dotnet
         run: |
-            CD WebApplication1\WebApplication1
+            CD WebApplication1\DfPowerBI
             dotnet build --configuration Release
             dotnet publish -c Release  
 
@@ -37,7 +37,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: .net-app
-          path: ./WebApplication1/WebApplication1/bin/Release/net6.0/publish
+          path: ./WebApplication1/DfPowerBI/bin/Release/net8.0/publish
          
   deploy:
     runs-on: windows-latest
@@ -57,7 +57,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'testprofilepulish'
+          app-name: 'DfPowerBIdev'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.PROFILE }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_FF0C6F1171E840F088CAF2AE07A61D61 }}
           package: .
