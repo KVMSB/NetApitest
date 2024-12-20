@@ -23,7 +23,8 @@ jobs:
         with:
            files: 'WebApplication1\DfPowerBI\appsettings.json'
         env:
-            AzureAd.ClientSecret: ${{ secrets.ClientSecret }}
+            AzureAd.ClientSecret: ${{ secrets.ADClientSecret }}
+            PowerBi.ClientSecret: ${{ secrets.ClientSecret }}
             ConnectionStrings.DbConnectionString: ${{ secrets.DbConnectionString }}
             App.ServerRootAddress: WebApplication1\DfPowerBI
 

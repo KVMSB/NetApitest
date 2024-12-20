@@ -37,7 +37,7 @@ namespace Services
      };
         public PowerBIEmbedService(IConfiguration configuration, IReportRepo reportRepo)
         {
-            var azureAdSection = configuration.GetSection("AzureAd");
+            var azureAdSection = configuration.GetSection("PowerBi");
             tenantId = azureAdSection["TenantId"];
             clientId = azureAdSection["ClientId"];
             clientSecret = azureAdSection["ClientSecret"];
