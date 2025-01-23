@@ -23,5 +23,12 @@ namespace DfPowerBI.Controllers
             string email = User.Claims.FirstOrDefault(x => x.Type == "preferred_username").Value;
             return await reportService.GetReports(email);
         }
+
+        [HttpPost("updateLoginTime")]
+        public async Task<string> UserLoginTime()
+        {
+            string email = User.Claims.FirstOrDefault(x => x.Type == "preferred_username").Value;
+            return await reportService.UpdateLastLoginTimeByEmail(email, DateTime.Now);
+        } 
     }
 }

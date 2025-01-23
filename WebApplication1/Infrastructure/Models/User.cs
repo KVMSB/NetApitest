@@ -15,5 +15,7 @@ public partial class User
 
     public string? CreatedBy { get; set; }
 
+    public DateTime? LastLoginTime { get; set; }
+
     public virtual ICollection<UserHospitalMap> UserHospitalMaps { get; set; } = new List<UserHospitalMap>();
 }

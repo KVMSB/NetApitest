@@ -29,5 +29,40 @@
         {
             return _context.Reports.FirstOrDefault(x => x.ReportId == reportID).HiddenPages;
         }
+
+
+        public async Task<string> UpdateLastLoginTimeByEmail(string email, DateTime lastLoginTime)
+        {
+            try
+            {
+                using (var context = _context)
+                {
+                    // Find the user by Email
+                    var user = context.Users.SingleOrDefault(u => u.Email == email);
+
+                    if (user != null)
+                    {
+                        // Update the LastLoginTime
+                        user.LastLoginTime = lastLoginTime;
+
+                        // Save changes to the database
+                        await context.SaveChangesAsync();
+
+                    }
+                    else
+                    {
+                        return "User not found with the provided email.";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error: {ex.Message}");
+                throw ex;
+            }
+
+            return "Last login time updated successfully.";
+
+        }
     }
 }

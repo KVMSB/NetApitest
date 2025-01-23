@@ -37,5 +37,10 @@
 
             return reports;
         }
+
+        public async Task<string> UpdateLastLoginTimeByEmail(string email, DateTime loginTIme)
+        {
+            return await _reportRepo.UpdateLastLoginTimeByEmail(email, loginTIme);
+        }
     }
 }
